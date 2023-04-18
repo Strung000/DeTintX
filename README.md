@@ -25,10 +25,10 @@ HOW TO TUNE
 - Enjoy!
 
 FYI
-The default settings for this mod are my personal tunings to remove the green tint in Cyberpunk 2077. Feel free to adjust the settings to your own liking. It should work in other games with similarly horrendous color grading, as long as you follow the same tuning steps.
-This thing is by no means a professional-grade piece of code - I am just a hobbyist. That being said, it really shouldn't impact performance. It's just some simple color manipulation.
+- The default settings for this mod are my personal tunings to remove the green tint in Cyberpunk 2077. Feel free to adjust the settings to your own liking. It should work in other games with similarly horrendous color grading, as long as you follow the same tuning steps.
+- This thing is by no means a professional-grade piece of code - I am just a hobbyist. That being said, it really shouldn't impact performance. It's just some simple color manipulation.
 
 FEEDBACK/SUPPORT
-Leave a comment OR...
-Contact me thru Discord - Strung#8013
-No need to endorse or shill or whatever. Just enjoy using the shader.
+- Leave a comment OR...
+- Contact me thru Discord - Strung#8013
+- No need to endorse or shill or whatever. Just enjoy using the shader.
