@@ -30,4 +30,4 @@ FYI
 - This thing is by no means a professional piece of code - I am just a hobbyist. 
 
 FEEDBACK/SUPPORT
-Contact me thru Discord - Strung#8013
+- Contact me thru Discord - Strung#8013
