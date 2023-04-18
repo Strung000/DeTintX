@@ -29,6 +29,4 @@ FYI
 - This thing is by no means a professional-grade piece of code - I am just a hobbyist. That being said, it really shouldn't impact performance. It's just some simple color manipulation.
 
 FEEDBACK/SUPPORT
-- Leave a comment OR...
 - Contact me thru Discord - Strung#8013
-- No need to endorse or shill or whatever. Just enjoy using the shader.
