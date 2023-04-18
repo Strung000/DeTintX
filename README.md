@@ -1,4 +1,4 @@
-TintBeGone™ - by Strung
+# TintBeGone™ - by Strung
 
 While direct color removal using shaders such as the Tonemapper may work in removing tint to some extent, I've always found that color subtraction often causes the image to become a too dark, sacrificing clarity. Increasing the source brightness (lower gamma setting) will tend to increase all color values and therefore slowly bring any tint back. This shader is made to bypass that limitation.
 
@@ -6,17 +6,17 @@ TintBeGone™ (not actually trademarked) subtracts the specified color from the 
 
 TintBeGone™ also has a shadow desaturation feature which can be used to desaturate darker areas and gives dark corners and rooms a naturalistic look closer to what you would interpret with your eyes, removing overly saturated shadows. This feature can be disabled depending on the player's preference.
 
-INSTALLATION
+### INSTALLATION
 - Install ReShade
 - Place the .fx file in reshade-shaders
 - Enable the shader in-game
 
-REQUIREMENTS
+### REQUIREMENTS
 - ReShade - obviously
 - prod80's shader repo - get the whole repo (available during reshade setup) OR...
 - prod80's PD80_00_Color_Spaces.fxh - just the color spaces file (place anywhere in reshade-shaders)
 
-HOW TO TUNE
+### HOW TO TUNE
 - Stare at something that (regardless of original tint) is supposed to be gray, like a gray concrete wall in a dark alley or a completely dark room.
 - Enable tuning mode to boost levels and make tuning easier
 - Start removing colors until the resulting picture is grey or has relatively equal distribution between red, green and blue (removing too much color can result in weird colors)
@@ -24,10 +24,10 @@ HOW TO TUNE
 - Disable tuning mode
 - Enjoy!
 
-FYI
+### FYI
 - The default settings for this shader are my personal tunings to remove the horrendous puke green tint in Cyberpunk 2077. Feel free to adjust the settings to your own liking. It should work in other games with similar color grading, as long as you follow the same tuning steps.
 - It should not impact performance. All it does is just some simple color manipulation.
 - This thing is by no means a professional piece of code - I am just a hobbyist. 
 
-FEEDBACK/SUPPORT
+### FEEDBACK/SUPPORT
 - Contact me thru Discord - Strung#8013
