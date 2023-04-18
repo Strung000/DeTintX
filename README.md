@@ -2,7 +2,7 @@
 
 While direct color removal using shaders such as the Tonemapper may work in removing tint to some extent, I've always found that color subtraction often causes the image to become a too dark, sacrificing clarity. Increasing the source brightness (lower gamma setting) will tend to increase all color values and therefore slowly bring any tint back. This shader is made to bypass that limitation.
 
-TintBeGone™ (not actually trademarked) subtracts the specified color from the image while also bringing each pixel back to its original luminance value after the fact through HSL/RGB conversion. This part is why prod80's repo is required to make this shader work (for now).
+TintBeGone™ (not actually trademarked) subtracts the specified color from the image while also bringing each pixel back to its original luminance value after the fact through HSL/RGB conversion. <sub>This part is why prod80's repo is required to make this shader work (for now).</sub>
 
 TintBeGone™ also has a shadow desaturation feature which can be used to desaturate darker areas and gives dark corners and rooms a naturalistic look closer to what you would interpret with your eyes, removing overly saturated shadows. This feature can be disabled depending on the player's preference.
 
