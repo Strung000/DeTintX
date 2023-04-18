@@ -7,22 +7,22 @@ TintBeGone™ (not actually trademarked) subtracts the specified color from the 
 TintBeGone™ also has a shadow desaturation pass which can be used to desaturate darker areas and gives dark corners and rooms a naturalistic look closer to what you would interpret with your eyes, removing highly saturated shadows. This feature can be disabled depending on the player's preference.
 
 INSTALLATION
-Install ReShade﻿
-Place the .fx file in reshade-shaders
-Enable the shader in-game
+- Install ReShade﻿
+- Place the .fx file in reshade-shaders
+- Enable the shader in-game
 
 REQUIREMENTS
-https://reshade.me/﻿ - obviously
-https://github.com/prod80/prod80-ReShade-Repository﻿ - get the whole repo (available during reshade setup) OR...
-https://github.com/prod80/prod80-ReShade-Repository/blob/master/Shaders/PD80_00_Color_Spaces.fxh﻿ - just the color spaces file (place anywhere in reshade-shaders)
+- https://reshade.me/﻿ - obviously
+- https://github.com/prod80/prod80-ReShade-Repository﻿ - get the whole repo (available during reshade setup) OR...
+- https://github.com/prod80/prod80-ReShade-Repository/blob/master/Shaders/PD80_00_Color_Spaces.fxh﻿ - just the color spaces file (place anywhere in reshade-shaders)
 
 HOW TO TUNE
-Stare at something that (regardless of original tint) is supposed to be gray, like a gray concrete wall in a dark alley or a completely dark room. (My spot: at night, the 2 garage doors with the garbage pile next to the Afterlife parking lot)
-Enable tuning mode to boost levels and make tuning easier
-Start removing colors until the resulting picture is grey or has relatively equal distribution between red, green and blue (removing too much color can result in weird colors)
-Desaturate shadows according to preference (also helps with weird resulting colors)
-Disable tuning mode
-Enjoy!
+- Stare at something that (regardless of original tint) is supposed to be gray, like a gray concrete wall in a dark alley or a completely dark room. (My spot: at night, the 2 garage doors with the garbage pile next to the Afterlife parking lot)
+- Enable tuning mode to boost levels and make tuning easier
+- Start removing colors until the resulting picture is grey or has relatively equal distribution between red, green and blue (removing too much color can result in weird colors)
+- Desaturate shadows according to preference (also helps with weird resulting colors)
+- Disable tuning mode
+- Enjoy!
 
 FYI
 The default settings for this mod are my personal tunings to remove the green tint in Cyberpunk 2077. Feel free to adjust the settings to your own liking. It should work in other games with similarly horrendous color grading, as long as you follow the same tuning steps.
