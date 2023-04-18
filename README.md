@@ -25,7 +25,7 @@ HOW TO TUNE
 - Enjoy!
 
 FYI
-- The default settings for this mod are my personal tunings to remove the horrendous puke green tint in Cyberpunk 2077. Feel free to adjust the settings to your own liking. It should work in other games with similar color grading, as long as you follow the same tuning steps.
+- The default settings for this shader are my personal tunings to remove the horrendous puke green tint in Cyberpunk 2077. Feel free to adjust the settings to your own liking. It should work in other games with similar color grading, as long as you follow the same tuning steps.
 - It should not impact performance. All it does is just some simple color manipulation.
 - This thing is by no means a professional piece of code - I am just a hobbyist. 
 
