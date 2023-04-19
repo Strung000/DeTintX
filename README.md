@@ -14,7 +14,7 @@ TintBeGone™ also has a shadow desaturation feature which can be used to desatu
 ### REQUIREMENTS
 - [ReShade](https://reshade.me/) - obviously
 - [prod80's shader repo](https://github.com/prod80/prod80-ReShade-Repository) - get the whole repo (available during reshade setup) OR...
-- [prod80's PD80_00_Color_Spaces.fxh](https://github.com/prod80/prod80-ReShade-Repository/blob/master/Shaders/PD80_00_Color_Spaces.fxh) - just the color spaces file (place anywhere in reshade-shaders)
+- [prod80's PD80_00_Color_Spaces.fxh](https://github.com/prod80/prod80-ReShade-Repository/blob/master/Shaders/PD80_00_Color_Spaces.fxh) - just the color spaces file (place anywhere in reshade-shaders\Shaders)
 
 ### HOW TO TUNE
 - Stare at something that (regardless of original tint) is supposed to be gray, like a gray concrete wall in a dark alley or a completely dark room.
