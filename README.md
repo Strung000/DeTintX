@@ -8,7 +8,7 @@ TintBeGone™ also has a shadow desaturation feature which can be used to desatu
 
 ### INSTALLATION
 - Install ReShade
-- Place the .fx file in reshade-shaders
+- Place the .fx file in <Game .exe directory>\reshade-shaders\Shaders
 - Enable the shader in-game
 
 ### REQUIREMENTS
