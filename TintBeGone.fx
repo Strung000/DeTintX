@@ -1,4 +1,4 @@
-//TintBeGone by Strung - updated 18/04/23
+//TintBeGone by Strung - v1.3
 
 #include "ReShadeUI.fxh"
 #include "ReShade.fxh"
@@ -11,27 +11,27 @@ uniform bool desaturateShadowsOn <
     ui_label = "Desaturate Dhadows";
 	ui_tooltip = "Desaturate darker areas for a more natural appearance.";
 > = true;
-uniform float desaturateShadowsPower < __UNIFORM_SLIDER_FLOAT1
+uniform float desaturateShadowsStart < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Shadow Desaturation";
-    ui_label = "Power";
-    ui_tooltip = "Shadow desaturation falloff.";
-> = 0.250;
-uniform float desaturateShadowsOffset < __UNIFORM_SLIDER_FLOAT1
+    ui_label = "Start";
+    ui_tooltip = "Saturation curve start.\n\nColors with lower luminance values than this are fully desaturated.";
+> = 0.010;
+uniform float desaturateShadowsEnd < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Shadow Desaturation";
-    ui_label = "Offset";
-    ui_tooltip = "Shadows are completely grayscale below this level of luminance.";
-> = 0.005;
+    ui_label = "End";
+    ui_tooltip = "Saturation curve end.\n\nColors with higher luminance values than this are unaffected.";
+> = 0.300;
+uniform float desaturateShadowsMix < __UNIFORM_SLIDER_FLOAT1
+    ui_category = "Shadow Desaturation";
+    ui_label = "Mix";
+    ui_tooltip = "Fade between full effect application and none.";
+> = 0.950;
 
-uniform bool tuningMode <
-	ui_category = "Detinting";
-    ui_label = "Tuning Mode";
-	ui_tooltip = "Stare at a dark & neutrally colored area (e.g. what is meant to be a gray wall in a dark corner) and adjust values until the result is actually dark and gray.";
-> = false;
 uniform float preserveLuminance < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Detinting";
     ui_label = "Preserve Luminance";
 	ui_tooltip = "Amount of luminance to preserve.";
-> = 0.900;
+> = 0.950;
 uniform float detintRed < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Detinting";
 	ui_label = "Red";
@@ -42,12 +42,25 @@ uniform float detintGreen < __UNIFORM_SLIDER_FLOAT1
 	ui_label = "Green";
 	ui_tooltip = "Amount of green to remove.";
 > = 0.075;
-
 uniform float detintBlue < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Detinting";
 	ui_label = "Blue";
 	ui_tooltip = "Amount of blue to remove.";
 > = 0.000;
+uniform float detintMix < __UNIFORM_SLIDER_FLOAT1
+    ui_category = "Detinting";
+    ui_label = "Mix";
+    ui_tooltip = "Fade between full effect application and none.\n\nUse a low mix value with proportionally higher RGB values for finer tuning.\ne.g. rgb(0.01,0.02,0.00) @ 100% mix == rgb(0.10,0.20,0.00) @ 10% mix";
+> = 0.950;
+
+uniform int tuningBoost < __UNIFORM_SLIDER_FLOAT1
+    ui_min = 1;
+    ui_max = 10;
+    ui_category = "Tuning";
+    ui_label = "Boost";
+	ui_tooltip = "Boost brightness to fine tune shadows.\n\nStare at a dark & neutrally colored area (e.g. what is meant to be a gray wall in a dark corner) and adjust values until the result is actually dark and gray.";
+> = 1;
+
 
 //---THE ACTUAL SHADER---
 
@@ -58,26 +71,27 @@ float3 UntintPass(float4 position : SV_Position, float2 texcoord : TexCoord) : S
     float3 oldHsl = RGBToHSL(color);
 
     float3 detintColor = float3(detintRed, detintGreen, detintBlue);
-    float3 detintedColor = color - detintColor;
+    float3 detintedRgb = color - (detintColor * detintMix);
 
-    detintedColor = saturate(detintedColor);
+    detintedRgb = saturate(detintedRgb);
 
-    float3 newHsl = RGBToHSL(detintedColor);
+    float3 newHsl = RGBToHSL(detintedRgb);
 	
 	float newSaturation = newHsl.y;
 	if (desaturateShadowsOn)
 	{
-		newSaturation = newHsl.y * (pow(saturate(newHsl.z - desaturateShadowsOffset), desaturateShadowsPower + 0.01f));
+		newSaturation = newHsl.y * saturate((newHsl.z - desaturateShadowsStart)/(desaturateShadowsEnd - desaturateShadowsStart + 0.01f));
+		newSaturation = (newSaturation * desaturateShadowsMix) + (oldHsl.y * (1 - desaturateShadowsMix));
 	}
     
-    float newLuminance = (oldHsl.z * preserveLuminance) + (newHsl.z * (1 - preserveLuminance));
+    float newLuminance = (oldHsl.z * preserveLuminance) + (newHsl.z * (1.01f - preserveLuminance));
 
     color = float3(newHsl.x, newSaturation, newLuminance);
     color = HSLToRGB(color);
 
-    if (tuningMode)
+    if (tuningBoost > 1)
     {
-        color *= 8;
+        color *= tuningBoost;
         color = saturate(color);
     }
 
