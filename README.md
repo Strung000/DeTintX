@@ -18,14 +18,14 @@ TintBeGone™ also has a shadow desaturation feature which can be used to desatu
 
 ### HOW TO TUNE
 - Stare at something that (regardless of original tint) is supposed to be gray, like a gray concrete wall in a dark alley or a completely dark room.
-- Enable tuning mode to boost levels and make tuning easier
-- Start removing colors until the resulting picture is grey or has relatively equal distribution between red, green and blue (removing too much color can result in weird colors)
-- Desaturate shadows according to preference (also helps with weird resulting colors)
-- Disable tuning mode
+- Increase tuning boost to allow for fine shadow tuning
+- Start removing colors until the resulting picture is grey or has relatively equal distribution between red, green and blue (removing too much can negatively impact results)
+- Desaturate shadows according to preference (helps with oversaturated shadows)
+- Reset tuning boost
 - Enjoy!
 
 ### FYI
-- The default settings for this shader are my personal tunings to remove the horrendous puke green tint in Cyberpunk 2077. Feel free to adjust the settings to your own liking. It should work in other games with similar color grading, as long as you follow the same tuning steps.
+- The default settings for this shader are my personal tunings to remove the horrendous puke green tint in Cyberpunk 2077 (which is actually more of a vomit yellow). Feel free to adjust the settings to your own liking. It should work in other games with similar color grading, as long as you follow the same tuning steps.
 - It should not impact performance. All it does is just some simple color manipulation.
 - This thing is by no means a professional piece of code - I am just a hobbyist. 
 
