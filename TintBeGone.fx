@@ -1,4 +1,4 @@
-//TintBeGone by Strung - v1.3
+//TintBeGone by Strung - v1.3.1
 
 #include "ReShadeUI.fxh"
 #include "ReShade.fxh"
@@ -33,20 +33,26 @@ uniform float preserveLuminance < __UNIFORM_SLIDER_FLOAT1
 	ui_tooltip = "Amount of luminance to preserve.";
 > = 0.950;
 uniform float detintRed < __UNIFORM_SLIDER_FLOAT1
+    ui_min = 0;
+    ui_max = 100;
     ui_category = "Detinting";
 	ui_label = "Red";
 	ui_tooltip = "Amount of red to remove.";
-> = 0.045;
+> = 4.5;
 uniform float detintGreen < __UNIFORM_SLIDER_FLOAT1
+    ui_min = 0;
+    ui_max = 100;
     ui_category = "Detinting";
 	ui_label = "Green";
 	ui_tooltip = "Amount of green to remove.";
-> = 0.075;
+> = 7.5;
 uniform float detintBlue < __UNIFORM_SLIDER_FLOAT1
+    ui_min = 0;
+    ui_max = 100;
     ui_category = "Detinting";
 	ui_label = "Blue";
 	ui_tooltip = "Amount of blue to remove.";
-> = 0.000;
+> = 0;
 uniform float detintMix < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Detinting";
     ui_label = "Mix";
@@ -70,7 +76,11 @@ float3 UntintPass(float4 position : SV_Position, float2 texcoord : TexCoord) : S
 
     float3 oldHsl = RGBToHSL(color);
 
-    float3 detintColor = float3(detintRed, detintGreen, detintBlue);
+    float detintRedFloat = detintRed * 0.01f;
+    float detintGreenFloat = detintGreen * 0.01f;
+    float detintBlueFloat = detintBlue * 0.01f;
+
+    float3 detintColor = float3(detintRedFloat, detintGreenFloat, detintBlueFloat);
     float3 detintedRgb = color - (detintColor * detintMix);
 
     detintedRgb = saturate(detintedRgb);
