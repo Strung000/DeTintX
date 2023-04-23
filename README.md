@@ -8,7 +8,7 @@ TintBeGone™ also has a shadow desaturation feature which can be used to desatu
 
 ### INSTALLATION
 - Install [ReShade](https://reshade.me/)
-- Make sure "Color effects by prod80" is ticked during package selection
+- Make sure ["Color effects by prod80"](https://github.com/prod80/prod80-ReShade-Repository) is ticked during package selection
 - Place the .fx file in <Game .exe directory>\reshade-shaders\Shaders
 - Enable the shader in-game
 
