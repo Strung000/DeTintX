@@ -1,4 +1,4 @@
-//TintBeGone by Strung - v1.3.1
+//TintBeGone by Strung - v1.4
 
 #include "ReShadeUI.fxh"
 #include "ReShade.fxh"
@@ -20,7 +20,12 @@ uniform float desaturateShadowsEnd < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Shadow Desaturation";
     ui_label = "End";
     ui_tooltip = "Saturation curve end.\n\nColors with higher luminance values than this are unaffected.";
-> = 0.300;
+> = 0.400;
+uniform float desaturateShadowsLinearity < __UNIFORM_SLIDER_FLOAT1
+    ui_category = "Shadow Desaturation";
+    ui_label = "Linearity";
+    ui_tooltip = "Saturation curve linearity.\n\nAffects the curvatuve of the saturation function. Higher values are more linear.";
+> = 0.250;
 uniform float desaturateShadowsMix < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Shadow Desaturation";
     ui_label = "Mix";
@@ -33,30 +38,24 @@ uniform float preserveLuminance < __UNIFORM_SLIDER_FLOAT1
 	ui_tooltip = "Amount of luminance to preserve.";
 > = 0.950;
 uniform float detintRed < __UNIFORM_SLIDER_FLOAT1
-    ui_min = 0;
-    ui_max = 100;
     ui_category = "Detinting";
 	ui_label = "Red";
 	ui_tooltip = "Amount of red to remove.";
-> = 4.5;
+> = 0.045;
 uniform float detintGreen < __UNIFORM_SLIDER_FLOAT1
-    ui_min = 0;
-    ui_max = 100;
     ui_category = "Detinting";
 	ui_label = "Green";
 	ui_tooltip = "Amount of green to remove.";
-> = 7.5;
+> = 0.075;
 uniform float detintBlue < __UNIFORM_SLIDER_FLOAT1
-    ui_min = 0;
-    ui_max = 100;
     ui_category = "Detinting";
 	ui_label = "Blue";
 	ui_tooltip = "Amount of blue to remove.";
-> = 0;
+> = 0.000;
 uniform float detintMix < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Detinting";
     ui_label = "Mix";
-    ui_tooltip = "Fade between full effect application and none.\n\nUse a low mix value with proportionally higher RGB values for finer tuning.\ne.g. rgb(0.01,0.02,0.00) @ 100% mix == rgb(0.10,0.20,0.00) @ 10% mix";
+    ui_tooltip = "Fade between full effect application and none.\n\nUse lower values with proportionally high color values for finer tuning\n(e.g. rgb(0.01,0.02,0,03) @ 100% mix = rgb(0.10,0.20,0.30) @ 10% mix";
 > = 0.950;
 
 uniform int tuningBoost < __UNIFORM_SLIDER_FLOAT1
@@ -64,7 +63,7 @@ uniform int tuningBoost < __UNIFORM_SLIDER_FLOAT1
     ui_max = 10;
     ui_category = "Tuning";
     ui_label = "Boost";
-	ui_tooltip = "Boost brightness to fine tune shadows.\n\nStare at a dark & neutrally colored area (e.g. what is meant to be a gray wall in a dark corner) and adjust values until the result is actually dark and gray.";
+	ui_tooltip = "Boost brightness to fine tune shadows.\n\nSee documentation for tuning guide.";
 > = 1;
 
 
@@ -76,11 +75,7 @@ float3 UntintPass(float4 position : SV_Position, float2 texcoord : TexCoord) : S
 
     float3 oldHsl = RGBToHSL(color);
 
-    float detintRedFloat = detintRed * 0.01f;
-    float detintGreenFloat = detintGreen * 0.01f;
-    float detintBlueFloat = detintBlue * 0.01f;
-
-    float3 detintColor = float3(detintRedFloat, detintGreenFloat, detintBlueFloat);
+    float3 detintColor = float3(detintRed, detintGreen, detintBlue);
     float3 detintedRgb = color - (detintColor * detintMix);
 
     detintedRgb = saturate(detintedRgb);
@@ -90,7 +85,7 @@ float3 UntintPass(float4 position : SV_Position, float2 texcoord : TexCoord) : S
 	float newSaturation = newHsl.y;
 	if (desaturateShadowsOn)
 	{
-		newSaturation = newHsl.y * saturate((newHsl.z - desaturateShadowsStart)/(desaturateShadowsEnd - desaturateShadowsStart + 0.01f));
+		newSaturation = newHsl.y * saturate(pow(abs((newHsl.z - desaturateShadowsStart)/(desaturateShadowsEnd - desaturateShadowsStart + 0.01f)), desaturateShadowsLinearity));
 		newSaturation = (newSaturation * desaturateShadowsMix) + (oldHsl.y * (1 - desaturateShadowsMix));
 	}
     
