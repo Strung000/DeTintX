@@ -1,4 +1,4 @@
-//TintBeGone by Strung - v1.4
+//TintBeGone by Strung - v1.4.1
 
 #include "ReShadeUI.fxh"
 #include "ReShade.fxh"
@@ -20,33 +20,33 @@ uniform float desaturateShadowsEnd < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Shadow Desaturation";
     ui_label = "End";
     ui_tooltip = "Saturation curve end.\n\nColors with higher luminance values than this are unaffected.";
-> = 0.400;
+> = 0.250;
 uniform float desaturateShadowsLinearity < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Shadow Desaturation";
     ui_label = "Linearity";
     ui_tooltip = "Saturation curve linearity.\n\nAffects the curvatuve of the saturation function. Higher values are more linear.";
-> = 0.250;
+> = 0.500;
 uniform float desaturateShadowsMix < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Shadow Desaturation";
     ui_label = "Mix";
     ui_tooltip = "Fade between full effect application and none.";
-> = 0.950;
+> = 0.900;
 
 uniform float preserveLuminance < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Detinting";
     ui_label = "Preserve Luminance";
 	ui_tooltip = "Amount of luminance to preserve.";
-> = 0.950;
+> = 1.000;
 uniform float detintRed < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Detinting";
 	ui_label = "Red";
 	ui_tooltip = "Amount of red to remove.";
-> = 0.045;
+> = 0.040;
 uniform float detintGreen < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Detinting";
 	ui_label = "Green";
 	ui_tooltip = "Amount of green to remove.";
-> = 0.075;
+> = 0.060;
 uniform float detintBlue < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Detinting";
 	ui_label = "Blue";
@@ -56,7 +56,7 @@ uniform float detintMix < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Detinting";
     ui_label = "Mix";
     ui_tooltip = "Fade between full effect application and none.\n\nUse lower values with proportionally high color values for finer tuning\n(e.g. rgb(0.01,0.02,0,03) @ 100% mix = rgb(0.10,0.20,0.30) @ 10% mix";
-> = 0.950;
+> = 1.000;
 
 uniform int tuningBoost < __UNIFORM_SLIDER_FLOAT1
     ui_min = 1;
@@ -85,11 +85,20 @@ float3 UntintPass(float4 position : SV_Position, float2 texcoord : TexCoord) : S
 	float newSaturation = newHsl.y;
 	if (desaturateShadowsOn)
 	{
-		newSaturation = newHsl.y * saturate(pow(abs((newHsl.z - desaturateShadowsStart)/(desaturateShadowsEnd - desaturateShadowsStart + 0.01f)), desaturateShadowsLinearity));
-		newSaturation = (newSaturation * desaturateShadowsMix) + (oldHsl.y * (1 - desaturateShadowsMix));
+        if (newHsl.z < desaturateShadowsStart) {
+            newSaturation = 0;
+        }
+        else if (newHsl.z > desaturateShadowsEnd) {
+            //No change
+        }
+        else {
+            newSaturation = newHsl.y * saturate(pow(abs((newHsl.z - desaturateShadowsStart) / (desaturateShadowsEnd - desaturateShadowsStart + 0.001f)), desaturateShadowsLinearity));
+        }
+		
+        newSaturation = (newSaturation * desaturateShadowsMix) + (oldHsl.y * (1 - desaturateShadowsMix));
 	}
     
-    float newLuminance = (oldHsl.z * preserveLuminance) + (newHsl.z * (1.01f - preserveLuminance));
+    float newLuminance = (oldHsl.z * preserveLuminance) + (newHsl.z * (1 - preserveLuminance));
 
     color = float3(newHsl.x, newSaturation, newLuminance);
     color = HSLToRGB(color);
