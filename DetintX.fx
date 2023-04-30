@@ -125,7 +125,7 @@ uniform int tuningBoost < __UNIFORM_SLIDER_FLOAT1
 
 float3 UntintPass(float4 position : SV_Position, float2 texcoord : TexCoord) : SV_Target
 {
-	float3 color = tex2D(ReShade::BackBuffer, texcoord).rgb;
+    float3 color = tex2D(ReShade::BackBuffer, texcoord).rgb;
     float3 oldHsl = RGBToHSL(color);
 
     //Detinting
@@ -169,7 +169,7 @@ float3 UntintPass(float4 position : SV_Position, float2 texcoord : TexCoord) : S
         newLuminance = (newLuminance - blackLevel) / (whiteLevel - blackLevel);
     }
     
-    //Shadow Boost - >>> THIS LOOKS LIKE SHIT - USE OTHER SHADERS <<<
+    //Shadow Boost
     if (shadowBoostOn)
     {
         
