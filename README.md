@@ -1,12 +1,12 @@
-# TintBeGone™ - by Strung
+# DetintX - by Strung
 
 While direct color removal using shaders such as ReShade's Tonemapper may work in removing tint to some extent, color subtraction often causes the image to become darker and clip, sacrificing clarity in the shadows. Increasing the source brightness will tend to increase all color values and therefore slowly bring any tint back. This shader is made to work around that limitation by allowing the user to carefully fine-tune shadows for a naturalistic appearance.
 
 The aim of this shader is to respect the intent of the visual artists and level designers while attempting to reproduce the original unaltered colors. No more, no less. Grays actually look gray, blues look blue, reds look red, and greens look green.
 
-TintBeGone™ (not actually trademarked) subtracts the specified color from the image while also bringing each pixel back to its original luminance value after the fact through HSL/RGB conversion. <sub>This part is why prod80's shader package is required to make this work (for now).</sub>
+DetintX subtracts the specified color from the image while also bringing each pixel back to its original luminance value after the fact through HSL/RGB conversion. <sub>This part is why prod80's shader package is required to make this work (for now).</sub>
 
-TintBeGone™ also has a shadow desaturation feature which can be used to desaturate darker areas and gives dark corners and rooms a more realistic appearance by removing overly saturated shadows. This feature can be disabled depending on the player's preference.
+DetintX also has a shadow desaturation feature which can be used to desaturate darker areas and gives dark corners and rooms a more realistic appearance by removing overly saturated shadows. This feature can be disabled depending on the player's preference.
 
 ### INSTALLATION
 - Install [ReShade](https://reshade.me/)
