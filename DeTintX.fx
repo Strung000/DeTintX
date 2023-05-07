@@ -1,4 +1,5 @@
-//DetintX v1.5 - by Strung
+﻿//DeTintX v1.5.1 - by Strung
+//Visit GitHub page for info - https://github.com/Strung000/DetintX
 
 #include "ReShadeUI.fxh"
 #include "ReShade.fxh"
@@ -20,17 +21,17 @@ uniform float detintRed < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Detinting";
     ui_label = "Red";
     ui_tooltip = "Amount of red to remove.";
-> = 0.055;
+> = 0.035;
 uniform float detintGreen < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Detinting";
     ui_label = "Green";
     ui_tooltip = "Amount of green to remove.";
-> = 0.075;
+> = 0.070;
 uniform float detintBlue < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Detinting";
     ui_label = "Blue";
     ui_tooltip = "Amount of blue to remove.";
-> = 0.010;
+> = 0.000;
 uniform float detintMix < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Detinting";
     ui_label = "Mix";
@@ -125,6 +126,7 @@ uniform int tuningBoost < __UNIFORM_SLIDER_FLOAT1
 
 float3 UntintPass(float4 position : SV_Position, float2 texcoord : TexCoord) : SV_Target
 {
+    //Get Color
     float3 color = tex2D(ReShade::BackBuffer, texcoord).rgb;
     float3 oldHsl = RGBToHSL(color);
 
@@ -172,7 +174,6 @@ float3 UntintPass(float4 position : SV_Position, float2 texcoord : TexCoord) : S
     //Shadow Boost
     if (shadowBoostOn)
     {
-        
         newLuminance = saturate(newLuminance);
 
         if (newLuminance < shadowBoostStart)
@@ -217,7 +218,7 @@ float3 UntintPass(float4 position : SV_Position, float2 texcoord : TexCoord) : S
     return color;
 }
 
-technique DetintX
+technique DeTintX
 {
 	pass
 	{
