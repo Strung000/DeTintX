@@ -1,36 +1,27 @@
 # DeTintX - by Strung
 
-While direct color removal using shaders such as ReShade's Tonemapper may work in removing tint to some extent, color subtraction often causes the image to become darker and clip, sacrificing clarity in the shadows. Increasing the source brightness will tend to increase all color values and therefore slowly bring any tint back. This shader is made to work around that limitation by allowing the user to carefully fine-tune shadows for a naturalistic appearance.
+Most shaders/presets that aim to remove tint do so by directly subtracting a certain color from the image. This often causes the image to darken, causing shadows to clip and lose clarity. DeTintX aims to work around this limitation by using HSL/RGB conversion to restore each pixel back to its original brightness. It also sports a few features that can help fine-tune shadows to achieve more naturalistic color.
 
-The aim of this shader is to respect the intent of the visual artists and level designers while attempting to reproduce the original unaltered colors. No more, no less. Grays actually look gray, blues look blue, reds look red, and greens look green.
+While it can be used to achieve a stylized look, the true aim of this shader is to respect the intent of the artists and level designers and attempt to restore the original colors as faithfully as possible without as little extra processing as possible.
 
-DeTintX subtracts the specified color from the image while also bringing each pixel back to its original luminance value after the fact through HSL/RGB conversion. <sub>This part is why prod80's shader package is required to make this work (for now).</sub>
-
-DeTintX also has a shadow desaturation feature which can be used to desaturate darker areas and gives dark corners and rooms a more realistic appearance by removing overly saturated shadows. This feature can be disabled depending on the player's preference.
+### FEATURES
+- **Shadow Desaturation**: Desaturates darker areas to alleviate weird colors post-detinting and provide a more realistic look to darker areas.
+- **Shadow Boost**: Boosts the brightness of darker areas to improve visibility at the cost of shadow contrast.
+- **Levels**: Black and white level adjustment to adjust for deeper blacks and brighter whites.
 
 ### INSTALLATION
 - Install [ReShade](https://reshade.me/)
-- Make sure ["Color effects by prod80"](https://github.com/prod80/prod80-ReShade-Repository) is ticked during package selection
 - Place the .fx file in <Game .exe directory>\reshade-shaders\Shaders
 - Enable the shader in-game
 
 ### REQUIREMENTS
-- [ReShade](https://reshade.me/) - obviously
-- [Color effects by prod80](https://github.com/prod80/prod80-ReShade-Repository) - get the whole shader package (available during reshade setup) OR...
-- [PD80_00_Color_Spaces.fxh](https://github.com/prod80/prod80-ReShade-Repository/blob/master/Shaders/PD80_00_Color_Spaces.fxh) - just the color spaces file (place anywhere in reshade-shaders\Shaders)
-
-### HOW TO TUNE
-- Stare at something that (regardless of original tint) is supposed to be gray, like a gray concrete wall in a dark alley or a completely dark room.
-- Increase tuning boost to allow for fine shadow tuning
-- Start removing colors until the resulting picture is grey or has relatively equal distribution between red, green and blue (removing too much can negatively impact results)
-- Desaturate shadows according to preference (helps with oversaturated shadows)
-- Reset tuning boost
-- Enjoy!
+- [ReShade](https://reshade.me/)
 
 ### FYI
-- The default settings for this shader are my personal tunings to remove the horrendous puke green tint in Cyberpunk 2077 (which is actually more of a vomit yellow). Feel free to adjust the settings to your own liking. It should work in other games with similar color grading, as long as you follow the same tuning steps.
-- It should not impact performance. All it does is just some simple color manipulation.
-
+- The default settings for this shader are my personal tunings to remove the horrendous puke green tint in Cyberpunk 2077 (which is actually more of a vomit yellow). Feel free to adjust the settings to your own liking. It should work in other games with similar color grading.
+- There are 2 ways the shader can calculate what brightness to restore a certain pixel back to. "HSL Lightness" is the old pre-1.6 method, which works well in midtones and highlights but suffers from bad gradients and inaccurate shadows, causing more relatively bright colors like yellow to appear much darker when in shadow, sacrificing clarity. "Component Average" is a different method that is slightly less accurate but has good gradients and better color representation in the shadows. I prefer the look of Component Average, but if you notice any particularly bad color artifacts with this method, let me know and I can try to implement other methods.
+- Pre-1.6 versions of this shader require [Color effects by prod80](https://github.com/prod80/prod80-ReShade-Repository) due to needing external HSL/RGB conversion functions to work properly. Since 1.6, I have implemented my own HSL/RGB conversion functions, so this is no longer a dependency.
+  
 ### FEEDBACK/SUPPORT
 - Contact me thru Discord - Strung#8013
-- Available on [NexusMods](https://www.nexusmods.com/cyberpunk2077/mods/8118) with images
+- Available on [NexusMods](https://www.nexusmods.com/cyberpunk2077/mods/8118) with example screenshots
