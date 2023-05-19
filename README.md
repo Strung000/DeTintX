@@ -4,8 +4,6 @@ Most shaders/presets that aim to remove tint do so by directly subtracting a cer
 
 While it can be used to achieve a stylized look, the true aim of this shader is to respect the intent of the artists and level designers and attempt to restore the original colors as faithfully as possible without as little extra processing as possible.
 
-<iframe frameborder="0" class="juxtapose" width="100%" height="1080" src="https://cdn.knightlab.com/libs/juxtapose/latest/embed/index.html?uid=ef1cc838-f68a-11ed-b5bd-6595d9b17862"></iframe>
-
 ### FEATURES
 - **Shadow Desaturation**: Desaturates darker areas to fix oversaturated shadows and provide a more realistic look to darker areas.
 - **Shadow Boost**: Boosts the brightness of darker areas to improve visibility at the cost of shadow contrast.
