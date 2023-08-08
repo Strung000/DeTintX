@@ -2,7 +2,7 @@
 
 Most shaders/presets that aim to remove tint do so by directly subtracting a certain color from the image. This often causes the image to darken, causing shadows to clip and lose shadow clarity. DeTintX aims to work around this limitation by using HSL/RGB conversion to restore each pixel back to its original brightness, in addition to many features that can help fine-tune shadows for more naturalistic color.
 
-The aim of this shader is to respect the intent of the artists and level designers and attempt to restore the original colors as faithfully as possible and undoing excessive or bad color correction.
+The aim of this shader is to respect the intent of the artists and level designers by undoing excessive or bad color correction while attemting to replicate the original color and brightness.
 
 ### FEATURES
 - **Shadow Desaturation**: Desaturates darker areas to prevent oversaturated shadows.
