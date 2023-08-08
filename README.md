@@ -23,5 +23,5 @@ While it can be used to achieve a stylized look, the true aim of this shader is 
 - Pre-1.6 versions of this shader require [Color effects by prod80](https://github.com/prod80/prod80-ReShade-Repository) due to needing external HSL/RGB conversion functions to work properly. Since 1.6, I have implemented my own HSL/RGB conversion functions, so this is no longer a dependency.
   
 ### FEEDBACK/SUPPORT
-- Contact me thru Discord - Strung#8013
+- Contact me thru Discord - @strung
 - Available on [NexusMods](https://www.nexusmods.com/cyberpunk2077/mods/8118) with example screenshots
