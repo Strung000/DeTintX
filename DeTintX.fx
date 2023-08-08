@@ -1,4 +1,4 @@
-﻿//DeTintX v1.6 - by Strung
+//DeTintX v1.6.1 - by Strung
 //Visit GitHub page for info - https://github.com/Strung000/DetintX
 
 #include "ReShadeUI.fxh"
@@ -17,12 +17,12 @@ uniform int preserveLightnessMethod <
     ui_label = "Method";
     ui_type = "combo";
     ui_items = "HSL Lightness\0Component Average\0";
-    ui_tooltip = "Method of lightness preservation.\n\nRead documentation for info.";
+    ui_tooltip = "Method of lightness preservation.";
 > = 1;
 uniform float preserveLightness < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Detinting";
     ui_label = "Preserve Lightness";
-    ui_tooltip = "Amount of lightness to preserve.\n\nNo preservation will directly subtract color.";
+    ui_tooltip = "Amount of lightness to preserve.";
 > = 1.000;
 uniform float detintRed < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Detinting";
@@ -42,14 +42,14 @@ uniform float detintBlue < __UNIFORM_SLIDER_FLOAT1
 uniform float detintMix < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Detinting";
     ui_label = "Mix";
-    ui_tooltip = "Fade between full effect application and none.\n\nUse lower values with proportionally high color values for finer tuning\n(e.g. rgb(0.01,0.02,0,03) @ 100% mix = rgb(0.10,0.20,0.30) @ 10% mix";
+    ui_tooltip = "Amount to blend with input color.";
 > = 1.000;
 
 //Shadow Desaturation
 uniform bool desaturateShadowsOn <
     ui_category = "Shadow Desaturation";
     ui_label = "Desaturate Dhadows";
-    ui_tooltip = "Desaturate darker areas for a more natural appearance.";
+    ui_tooltip = "Desaturate darker colors.";
 > = true;
 uniform float desaturateShadowsStart < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Shadow Desaturation";
@@ -64,7 +64,7 @@ uniform float desaturateShadowsEnd < __UNIFORM_SLIDER_FLOAT1
 uniform float desaturateShadowsMix < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Shadow Desaturation";
     ui_label = "Mix";
-    ui_tooltip = "Fade between full effect application and none.";
+    ui_tooltip = "Amount to blend with input color.";
 > = 1.000;
 
 //Levels
@@ -88,7 +88,7 @@ uniform float whiteLevel < __UNIFORM_SLIDER_FLOAT1
 uniform bool shadowBoostOn <
     ui_category = "Shadow Boost";
     ui_label = "Shadow Boost";
-    ui_tooltip = "Boost shadow brightness for improved visibility in darker areas.";
+    ui_tooltip = "Boost shadow brightness for improved visibility.";
 > = true;
 uniform float shadowBoostAmount < __UNIFORM_SLIDER_FLOAT1
     ui_min = 0;
@@ -119,10 +119,8 @@ uniform int tuningBoost < __UNIFORM_SLIDER_FLOAT1
     ui_max = 10;
     ui_category = "Tuning";
     ui_label = "Boost";
-	ui_tooltip = "Boost brightness to fine tune shadows.\n\nSee documentation for tuning guide.";
+	ui_tooltip = "Boost brightness to fine tune slider values.";
 > = 1;
-
-//---THE ACTUAL SHIT---
 
 float3 rgb2hsl(float3 rgb)
 {
@@ -210,10 +208,10 @@ float3 hsl2rgb (float3 hsl)
     float m = 0;
     switch (preserveLightnessMethod)
     {
-        case 0:
+        case 0: //HSL Lightness (Old)
             m = l - (c / 2);
             break;
-        case 1:
+        case 1: //Component Average
             m = l - ((rgb.x * 0.33f) + (rgb.y * 0.33f) + (rgb.z * 0.33f));
             break;
     }
@@ -323,5 +321,3 @@ technique DeTintX
 		PixelShader = UntintPass;
 	}
 }
-
-//---FUCK---
