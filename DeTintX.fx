@@ -20,7 +20,7 @@ uniform float detintGreen < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Detinting";
     ui_label = "Green";
     ui_tooltip = "Amount of green to remove.";
-> = 0.070;
+> = 0.060;
 uniform float detintBlue < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Detinting";
     ui_label = "Blue";
