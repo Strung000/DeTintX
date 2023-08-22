@@ -1,4 +1,4 @@
-﻿//DeTintX v2.0 - by Strung
+﻿//DeTintX v2.0.1 - by Strung
 //Visit GitHub page for info - https://github.com/Strung000/DetintX
 
 #include "ReShadeUI.fxh"
