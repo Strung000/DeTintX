@@ -109,7 +109,7 @@ float3 rgb2hsl(float3 rgb)
     //Chroma
     float cMax = max(r, max(g, b));
     float cMin = min(r, min(g, b));
-    float c = (cMax - cMin);
+    float c = (cMax - cMin) + 0.001f;
 
     //Lightness
     float l = (cMax + cMin) / 2;
