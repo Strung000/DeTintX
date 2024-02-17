@@ -16,7 +16,7 @@ Most shaders/presets that aim to remove tint do so by directly subtracting a cer
 
 ### FYI
 - The default settings for this shader is tuned for removing the green tint in Cyberpunk 2077. Feel free to adjust the settings to your own liking.
-- Players using HDR are encouraged to modify the black levels of the image using the sliders to prevent overly bright shadows included in the shader. In my experience, I find that I have to set the black value to around 0.05, but your preference may vary.
+- Players using HDR are encouraged to modify the black levels of the image using the sliders included in the shader to prevent overly bright shadows. In my experience, I find that I have to set the black value to around 0.05, but your preference may vary.
 - The installation process is the same for all games and ReShade installations.
   
 ### FEEDBACK/SUPPORT
