@@ -59,19 +59,23 @@ uniform float desaturateShadowsMix < __UNIFORM_SLIDER_FLOAT1
 uniform float normalizationMix < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Normalization";
     ui_label = "Mix";
+    ui_tooltip = "Amount to restore original luma.";
 > = 1;
 
 uniform bool levelsOn < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Levels";
     ui_label = "Levels";
+    ui_tooltip = "Adjust black and white levels.";
 > = true;
 uniform float levelsBlack < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Levels";
     ui_label = "Black";
+    ui_tooltip = "Brightness level below where colors become pure black.";
 > = 0.01;
 uniform float levelsWhite < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Levels";
     ui_label = "White";
+    ui_tooltip = "Brightness level above where colors become pure white.";
 > = 1;
 
 //Advanced
@@ -105,7 +109,7 @@ float3 rgb2hsl(float3 rgb)
     //Chroma
     float cMax = max(r, max(g, b));
     float cMin = min(r, min(g, b));
-    float c = (cMax - cMin) + 0.001f;
+    float c = (cMax - cMin);
 
     //Lightness
     float l = (cMax + cMin) / 2;
