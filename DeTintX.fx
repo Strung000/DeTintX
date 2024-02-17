@@ -1,4 +1,4 @@
-﻿//DeTintX v2.0.1 - by Strung
+﻿//DeTintX v2.2 - by Strung
 //Visit GitHub page for info - https://github.com/Strung000/DetintX
 
 #include "ReShadeUI.fxh"
@@ -56,46 +56,23 @@ uniform float desaturateShadowsMix < __UNIFORM_SLIDER_FLOAT1
     ui_tooltip = "Amount to blend with input saturation.";
 > = 1.00;
 
-//Levels
-uniform bool levelsOn <
+uniform float normalizationMix < __UNIFORM_SLIDER_FLOAT1
+    ui_category = "Normalization";
+    ui_label = "Mix";
+> = 1;
+
+uniform bool levelsOn < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Levels";
     ui_label = "Levels";
-    ui_tooltip = "Adjust white/black levels.";
 > = true;
-uniform float blackLevel < __UNIFORM_SLIDER_FLOAT1
+uniform float levelsBlack < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Levels";
-    ui_label = "Black Level";
-    ui_tooltip = "Adjust black level for deeper blacks.";
-> = 0.004;
-uniform float whiteLevel < __UNIFORM_SLIDER_FLOAT1
+    ui_label = "Black";
+> = 0.01;
+uniform float levelsWhite < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Levels";
-    ui_label = "White Level";
-    ui_tooltip = "Adjust white level for brighter highlights.";
-> = 0.996;
-
-//Shadow Boost
-uniform bool shadowBoostOn <
-    ui_category = "Shadow Boost";
-    ui_label = "Shadow Boost";
-    ui_tooltip = "Boost shadow brightness for improved visibility.";
-> = true;
-uniform float shadowBoostAmount < __UNIFORM_SLIDER_FLOAT1
-    ui_min = 0;
-    ui_max = 5;
-    ui_category = "Shadow Boost";
-    ui_label = "Boost";
-    ui_tooltip = "Amount to boost shadow brightness.";
-> = 0.000;
-uniform float shadowBoostStart < __UNIFORM_SLIDER_FLOAT1
-    ui_category = "Shadow Boost";
-    ui_label = "Start";
-    ui_tooltip = "Shadow boost curve start.\n\nColors with lower lightness values than this are fully boosted.";
-> = 0.015;
-uniform float shadowBoostEnd < __UNIFORM_SLIDER_FLOAT1
-    ui_category = "Shadow Boost";
-    ui_label = "End";
-    ui_tooltip = "Shadow boost curve end.\n\nColors with higher lightness values than this are not boosted.";
-> = 0.250;
+    ui_label = "White";
+> = 1;
 
 //Advanced
 uniform bool showClipping <
@@ -105,7 +82,7 @@ uniform bool showClipping <
 > = false;
 uniform int tuningBoost < __UNIFORM_SLIDER_INT1
     ui_min = 1;
-    ui_max = 10;
+    ui_max = 20;
     ui_category = "Advanced";
     ui_label = "Tuning Boost";
 	ui_tooltip = "Boost output to fine tune shadows.";
@@ -114,7 +91,7 @@ uniform int lumaMode <
     ui_category = "Advanced";
     ui_label = "Luma Coefficients";
     ui_type = "combo";
-    ui_items = "Rec. 709 (sRGB)\0Rec. 2020 (HDR)\0Rec. 601 (SDTV)\0Adobe RGB\0";
+    ui_items = "Rec. 709 (sRGB)\0Rec. 2020 (HDR)\0Rec. 601 (SDTV)\0Adobe RGB\0Component Average\0";
     ui_tooltip = "Luma coefficients to use during luma preservation.";
 > = 0;
 
@@ -128,7 +105,7 @@ float3 rgb2hsl(float3 rgb)
     //Chroma
     float cMax = max(r, max(g, b));
     float cMin = min(r, min(g, b));
-    float c = cMax - cMin;
+    float c = (cMax - cMin) + 0.001f;
 
     //Lightness
     float l = (cMax + cMin) / 2;
@@ -176,7 +153,8 @@ float3 getLumaCoeffs (int mode)
         float3(0.213f, 0.715f, 0.072f) * (mode == 0) + //Rec. 709 (sRGB)
         float3(0.263f, 0.678f, 0.059f) * (mode == 1) + //Rec. 2020 (HDR)
         float3(0.299f, 0.587f, 0.114f) * (mode == 2) + //Rec. 601 (SDTV)
-        float3(0.212f, 0.701f, 0.087f) * (mode == 3) //Adobe RGB
+        float3(0.212f, 0.701f, 0.087f) * (mode == 3) + //Adobe RGB
+        float3(0.333f, 0.333f, 0.333f) * (mode == 4) //Component Average
     ;
 
     return output;
@@ -191,15 +169,11 @@ float rgb2luma (float3 rgb)
 
 float3 normalizeRgb (float3 inputRgb, float targetLuma)
 {
-    inputRgb = saturate(inputRgb - 0.005f) + 0.005f;
-
     float inputLuma = rgb2luma(inputRgb);
 
-    float lumaCoeff = targetLuma/inputLuma;
+    float lumaCoeff = targetLuma/(inputLuma + 0.005f);
 
-    float3 outputRgb = inputRgb * lumaCoeff;
-
-    outputRgb -= 0.005f;
+    float3 outputRgb = (inputRgb + 0.005f) * lumaCoeff;
 
     return saturate(outputRgb);
 }
@@ -211,47 +185,37 @@ float3 UntintPass(float4 position : SV_Position, float2 texcoord : TexCoord) : S
     float3 inputRgb = tex2D(ReShade::BackBuffer, texcoord);
     float3 inputHsl = rgb2hsl(inputRgb);
 
-    //Input luma
-    float inputLuma = rgb2luma(inputRgb);
+    //Initial luma
+    float initialLuma = rgb2luma(inputRgb);
 
     //Detinting
     float3 detintedRgb = inputRgb - (float3(detintRed, detintGreen, detintBlue) * (detintMix * detintOn));
     float3 detintedHsl = rgb2hsl(detintedRgb);
 
-    //Shadow desaturation
-    float preNormalSaturation = detintedHsl.y * saturate((detintedHsl.z - desaturateShadowsStart) / (desaturateShadowsEnd - desaturateShadowsStart));
-    preNormalSaturation = (preNormalSaturation * (desaturateShadowsMix * desaturateShadowsOn)) + (detintedHsl.y * (1 - (desaturateShadowsMix * desaturateShadowsOn)));
-    
+    float preNormalSaturation = detintedHsl.y * (saturate((detintedHsl.z - desaturateShadowsStart) / (desaturateShadowsEnd - desaturateShadowsStart)));
+    preNormalSaturation = (preNormalSaturation * ((desaturateShadowsMix) * desaturateShadowsOn)) + (detintedHsl.y * (1 - ((desaturateShadowsMix) * desaturateShadowsOn)));
+
     //Pre-normal color
     float3 preNormalHsl = float3(detintedHsl.x, preNormalSaturation, detintedHsl.z);
     float3 preNormalRgb = hsl2rgb(preNormalHsl);
 
-    //Normalize to input luma
-    float3 normalRgb = normalizeRgb(preNormalRgb, inputLuma);
-    float3 normalHsl = rgb2hsl(normalRgb);
-
-    //Lightness post-processing
-    float outputLightness = normalHsl.z;
+    //Normalize to initial luma
+    float3 normalRgb = normalizeRgb(preNormalRgb, initialLuma);
+    float3 outputRgb = (preNormalRgb * (1 - normalizationMix)) + (normalRgb * normalizationMix);
 
     //Levels
-    outputLightness = (outputLightness - (blackLevel * levelsOn)) / (pow(whiteLevel, levelsOn) - blackLevel);
-
-    //Shadow Boost
-    outputLightness *= 1 + ((shadowBoostAmount * saturate((outputLightness - shadowBoostEnd) / (shadowBoostStart - shadowBoostEnd))) * shadowBoostOn);
-
-    //Output color
-    float3 outputHsl = float3(normalHsl.x, normalHsl.y, outputLightness);
-    float3 outputRgb = hsl2rgb(outputHsl);
+    outputRgb = (outputRgb - (levelsBlack * levelsOn)) / (pow(levelsWhite, levelsOn) - levelsBlack);
+    outputRgb = saturate(outputRgb);
 
     //Show clipping
-    bool clippingBelow = (outputRgb == float3(0, 0, 0)) && showClipping;
-    bool clippingAbove = (outputRgb == float3(1, 1, 1)) && showClipping;
+    bool clippingBelow = (rgb2luma(outputRgb) <= 0) && showClipping;
+    bool clippingAbove = (rgb2luma(outputRgb) >= 1) && showClipping;
     outputRgb = (outputRgb * (!clippingBelow && !clippingAbove)) + (float3(1, 1, 1) * clippingBelow);
 
     //Tuning boost
     outputRgb *= tuningBoost;
 
-    return outputRgb;
+    return saturate(outputRgb);
 }
 
 //---TECHNIQUE---
