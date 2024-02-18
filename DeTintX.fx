@@ -15,12 +15,12 @@ uniform float detintRed < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Detinting";
     ui_label = "Red";
     ui_tooltip = "Amount of red to remove.";
-> = 0.035;
+> = 0.030;
 uniform float detintGreen < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Detinting";
     ui_label = "Green";
     ui_tooltip = "Amount of green to remove.";
-> = 0.060;
+> = 0.045;
 uniform float detintBlue < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Detinting";
     ui_label = "Blue";
@@ -49,12 +49,12 @@ uniform float desaturateShadowsEnd < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Shadow Desaturation";
     ui_label = "End";
     ui_tooltip = "Saturation curve end.\n\nColors with higher lightness values than this are not desaturated.";
-> = 0.125;
+> = 0.100;
 uniform float desaturateShadowsMix < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Shadow Desaturation";
     ui_label = "Mix";
     ui_tooltip = "Amount to blend with input saturation.";
-> = 1.00;
+> = 1.000;
 
 uniform float normalizationMix < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Normalization";
@@ -71,12 +71,12 @@ uniform float levelsBlack < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Levels";
     ui_label = "Black";
     ui_tooltip = "Brightness level below where colors become pure black.";
-> = 0.01;
+> = 0.010;
 uniform float levelsWhite < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Levels";
     ui_label = "White";
     ui_tooltip = "Brightness level above where colors become pure white.";
-> = 1;
+> = 0.990;
 
 //Advanced
 uniform bool showClipping <
@@ -84,7 +84,7 @@ uniform bool showClipping <
     ui_label = "Show Clipping";
     ui_tooltip = "Invert clipped regions.";
 > = false;
-uniform int tuningBoost < __UNIFORM_SLIDER_INT1
+uniform float tuningBoost < __UNIFORM_SLIDER_INT1
     ui_min = 1;
     ui_max = 20;
     ui_category = "Advanced";
