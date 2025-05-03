@@ -1,4 +1,4 @@
-# DeTintX - by Strung
+# DeTintX
 
 Most shaders/presets that aim to remove tint do so by directly subtracting a certain color from the image. This often causes the image to darken, causing shadows to clip and lose shadow clarity. DeTintX aims to work around this limitation by using HSL/RGB conversion to restore each pixel back to its original percieved brightness, in addition to many features that can help fine-tune shadows for more naturalistic color.
 
@@ -20,5 +20,4 @@ Most shaders/presets that aim to remove tint do so by directly subtracting a cer
 - The installation process is the same for all games and ReShade installations.
   
 ### FEEDBACK/SUPPORT
-- Contact me thru Discord - @strung
 - Available on [NexusMods](https://www.nexusmods.com/cyberpunk2077/mods/8118) with example screenshots
