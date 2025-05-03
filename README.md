@@ -4,6 +4,7 @@ Most shaders/presets that aim to remove tint do so by directly subtracting a cer
 
 ### ADDITIONAL FEATURES
 - **Shadow Desaturation**: Desaturates darker areas to prevent oversaturated shadows.
+- **Hue Selection**: Restores some or all of the saturation of hues affected by shadow desaturation if different from detinting hue.
 - **Levels**: Black and white level adjustment to adjust for deeper blacks and brighter whites.
 
 ### INSTALLATION
