@@ -1,5 +1,5 @@
-﻿//DeTintX v2.2 - by Strung
-//Visit GitHub page for info - https://github.com/Strung000/DetintX
+﻿//DeTintX v2.3 - by chuusou
+//Visit GitHub page for info - https://github.com/chuusou/DetintX
 
 #include "ReShadeUI.fxh"
 #include "ReShade.fxh"
@@ -20,7 +20,7 @@ uniform float detintGreen < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Detinting";
     ui_label = "Green";
     ui_tooltip = "Amount of green to remove.";
-> = 0.045;
+> = 0.060;
 uniform float detintBlue < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Detinting";
     ui_label = "Blue";
@@ -31,6 +31,25 @@ uniform float detintMix < __UNIFORM_SLIDER_FLOAT1
     ui_label = "Mix";
     ui_tooltip = "Amount to blend with input color.";
 > = 1.000;
+
+//Hue Selection
+uniform bool hueSelectionOn <
+    ui_category = "Hue Selection";
+    ui_label = "Hue Selection";
+    ui_tooltip = "Restore saturation of hues other than detinting color when desaturating shadows.";
+> = true;
+uniform float hueSelectionWidth < __UNIFORM_SLIDER_FLOAT1
+    ui_min = 0;
+    ui_max = 12;
+    ui_category = "Hue Selection";
+    ui_label = "Width";
+    ui_tooltip = "Width of hue range.";
+> = 4.500;
+uniform float hueSelectionMix < __UNIFORM_SLIDER_FLOAT1
+    ui_category = "Hue Selection";
+    ui_label = "Mix";
+    ui_tooltip = "Amount to restore saturation on colors other than target hue.";
+> = 0.900;
 
 //Shadow Desaturation
 uniform bool desaturateShadowsOn <
@@ -49,19 +68,21 @@ uniform float desaturateShadowsEnd < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Shadow Desaturation";
     ui_label = "End";
     ui_tooltip = "Saturation curve end.\n\nColors with higher lightness values than this are not desaturated.";
-> = 0.100;
+> = 0.200;
 uniform float desaturateShadowsMix < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Shadow Desaturation";
     ui_label = "Mix";
     ui_tooltip = "Amount to blend with input saturation.";
 > = 1.000;
 
+//Normalization
 uniform float normalizationMix < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Normalization";
     ui_label = "Mix";
     ui_tooltip = "Amount to restore original luma.";
-> = 1;
+> = 1.000;
 
+//Levels
 uniform bool levelsOn < __UNIFORM_SLIDER_FLOAT1
     ui_category = "Levels";
     ui_label = "Levels";
@@ -193,11 +214,17 @@ float3 UntintPass(float4 position : SV_Position, float2 texcoord : TexCoord) : S
     float initialLuma = rgb2luma(inputRgb);
 
     //Detinting
-    float3 detintedRgb = inputRgb - (float3(detintRed, detintGreen, detintBlue) * (detintMix * detintOn));
+    float3 detintRgb = float3(detintRed, detintGreen, detintBlue);
+    float3 detintHsl = rgb2hsl(detintRgb);
+    float3 detintedRgb = inputRgb - (detintRgb * (detintMix * detintOn));
     float3 detintedHsl = rgb2hsl(detintedRgb);
 
+    //Hue Selection
+    float3 hueSelectionFactor = saturate((abs((((detintedHsl.x - detintHsl.x) + 3) % 6) - 3)) * (1 / hueSelectionWidth)) * (hueSelectionMix * hueSelectionOn);
+
+    //Shadow Desaturation
     float preNormalSaturation = detintedHsl.y * (saturate((detintedHsl.z - desaturateShadowsStart) / (desaturateShadowsEnd - desaturateShadowsStart)));
-    preNormalSaturation = (preNormalSaturation * ((desaturateShadowsMix) * desaturateShadowsOn)) + (detintedHsl.y * (1 - ((desaturateShadowsMix) * desaturateShadowsOn)));
+    preNormalSaturation = (preNormalSaturation * ((1 - hueSelectionFactor) * desaturateShadowsMix * desaturateShadowsOn)) + (detintedHsl.y * (1 - ((1 - hueSelectionFactor) * desaturateShadowsMix * desaturateShadowsOn)));
 
     //Pre-normal color
     float3 preNormalHsl = float3(detintedHsl.x, preNormalSaturation, detintedHsl.z);
